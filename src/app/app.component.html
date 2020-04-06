@@ -1,0 +1,129 @@
+<div>
+<h3> Add Fee Schedule</h3>
+<hr/>
+</div>
+
+
+<form [formGroup]="form1">
+  <div class="row">
+    <div class="col-sm-4">
+    <div class="form-group">
+        <label for="name" class="control-label required">Fee Schedule Name</label>
+        <input 
+            formControlName="name"
+            id="name" 
+            type="text" 
+            placeholder="Enter Fee Schedule Name"
+            class="form-control">
+        <div class="alert alert-danger" *ngIf="form1.get('name').touched && form1.get('name').invalid"> <!-- Using form.get -->
+          <div *ngIf="form1.get('name').errors.required">Name is required.</div>
+        </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4">
+    <div class="form-group">
+        <label for="dos_start" class="control-label required">Effective Start </label>
+        <input 
+            formControlName="dos_start"
+            id="dos_start" 
+            placeholder="yyyy-mm-dd"
+            class="form-control"
+            ngbDatepicker #start_date="ngbDatepicker"
+            (click)="start_date.toggle()">
+        <div class="alert alert-danger" *ngIf="dos_start.touched && dos_start.invalid"> <!-- using property -->
+          <div *ngIf="dos_start.errors.required">Effective Start Date is required.</div>
+        </div>
+    </div>
+  </div>
+
+  <div class="col-sm-4">
+    <div class="form-group" >
+        <label for="dos_end">Effective End</label>
+        <input 
+            formControlName="dos_end"
+            id="dos_end" 
+            placeholder="yyyy-mm-dd"
+            class="form-control"
+            ngbDatepicker #end_date="ngbDatepicker"
+            (click)="end_date.toggle()">
+    </div>
+  </div>
+
+  </div>
+
+
+  <br>
+  <br>
+<br>
+  <h3>Procedure's Charge</h3>
+  <hr/>
+  
+  <div class="horizontal-scroll">
+    <table class="table table-condensed">
+      <thead>
+      <tr style="background-color:royalblue; color: white">
+        <th>Sr#</th>
+        <th>Procedure</th>
+        <th>Modifier</th>
+        <th>Charge</th>
+        <th> </th>
+      </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let cProcedureGroup of form1.get('chargeProcedure').controls;let i = index"
+           [formGroup]="cProcedureGroup">
+            
+             <td>{{i+1}}</td> 
+        <td>
+                <div class="form-group">
+                    <ng-select
+                    placeholder="Type min. 3 characters"
+                    formControlName="name">
+                    <ng-option *ngFor="let obj of cities" [value]="obj.id"> {{obj.name}}</ng-option>
+                   </ng-select>
+
+                   <div class="alert alert-danger" *ngIf="cProcedureGroup.get('name').touched && cProcedureGroup.get('name').invalid"> 
+                    <div *ngIf="cProcedureGroup.get('name').errors.required">Procedure Code is required.</div>
+                  </div>
+                </div>
+        </td>
+        <td>
+            <ng-select
+            placeholder="Choose.."
+            [multiple]="true"
+            formControlName="modifier">
+            <ng-option *ngFor="let obj of cities2" [value]="obj.id">
+                {{obj.name}}
+            </ng-option>
+           </ng-select>
+        </td>
+        <td>
+                <div class="form-group">
+                    <input 
+                        formControlName="charge"
+                        id="name" 
+                        type="number" 
+                        placeholder="Type Here.."
+                        class="form-control">
+                    <div class="alert alert-danger" *ngIf="cProcedureGroup.get('charge').touched && cProcedureGroup.get('charge').invalid"> 
+                      <div *ngIf="cProcedureGroup.get('charge').errors.required">Charge is required.</div>
+                    </div>
+                </div>
+        </td>
+  
+        <td>
+          <div class="button-wrapper">
+            <button type="button" class="btn btn-primary" (click)="addNewChargeProcedureGroup()">Add </button>
+            <button *ngIf="i!=0" type="button" style="margin-left: 5px" class="btn btn-danger btn-xs" (click)="deleteChargeProcedureGroup(i)">Delete</button>
+          </div>
+        </td>
+      
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+    <button class="btn btn-primary" (click)="saveRecord()">Save</button>
+</form>
+  
